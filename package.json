@@ -2,10 +2,11 @@
   "name": "titan-trip",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "src/index.ts",
   "type": "module",
   "scripts": {
-    "dev:cw": "wrangler dev --port 3000 --local"
+    "dev:cw": "wrangler dev --port 3000 --local",
+    "build": "esbuild --bundle --outdir=dist src/index.ts"
   },
   "keywords": [],
   "author": "",
@@ -15,11 +16,11 @@
     "@types/node": "^18.11.18",
     "@types/node-fetch": "^2.5.11",
     "edge-runtime": "^2.0.2",
+    "esbuild": "^0.17.12",
     "node-fetch": "^3.3.0",
     "prisma": "^4.8.0",
     "typescript": "^4.9.4",
     "watch": "^1.0.2",
     "wrangler": "^2.6.2"
-  },
-  "dependencies": {}
+  }
 }
