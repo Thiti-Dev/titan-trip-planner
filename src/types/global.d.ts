@@ -2,7 +2,7 @@ export {};
 
 declare global {
   interface Env {
-    OPEAN_AI_TOKEN: string;
+    OPEN_AI_ACCESS_KEY: string;
     GPT_MODEL: string;
     LINE_CHANNEL_ACCESS_TOKEN: string;
     GPT: any; // KV namespace
