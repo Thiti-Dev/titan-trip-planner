@@ -14,7 +14,7 @@ async function fetch(
 
   if (request.url.endsWith("/api/line-hook") && request.method === "POST") {
     const hookBody = await request.json<ILineHookBody>();
-    await proceedFurtherActionFromHookBody(hookBody, env);
+    context.waitUntil(proceedFurtherActionFromHookBody(hookBody, env)); // perform the task after returning the response
 
     return new Response(
       JSON.stringify({
