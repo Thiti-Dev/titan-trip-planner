@@ -5,7 +5,7 @@ declare global {
     OPEN_AI_ACCESS_KEY: string;
     GPT_MODEL: string;
     LINE_CHANNEL_ACCESS_TOKEN: string;
-    GPT: any; // KV namespace
+    GPT: KVNamespace; // KV namespace
   }
 
   interface ILineHookBody {
@@ -21,7 +21,11 @@ declare global {
         webhookEventId: string;
         deliveryContext: any;
         timestamp: number;
-        source: any;
+        source: {
+          type: "group";
+          groupId: string;
+          userId: string;
+        };
         replyToken: string;
         mode: "active";
       }

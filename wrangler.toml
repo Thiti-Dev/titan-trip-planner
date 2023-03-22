@@ -1,4 +1,9 @@
-name = "titan trip line hook handler"
+name = "titan-trip"
+
+kv_namespaces = [
+  { binding = "GPT", id = "2bcb7e5d9ba34a789245ad8a197dc2e7",preview_id="29c97666bbb1471aadeaf9b01b960fff" }
+]
+
 main = "src/index.ts"
 compatibility_date = "2023-03-22"
 
@@ -6,6 +11,3 @@ compatibility_date = "2023-03-22"
 GPT_MODEL = "gpt-3.5-turbo"
 
 
-kv_namespaces = [
-  { binding = "GPT", id = "2bcb7e5d9ba34a789245ad8a197dc2e7" }
-]

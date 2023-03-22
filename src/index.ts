@@ -13,7 +13,6 @@ async function fetch(
   if (request.url.endsWith("/api/line-hook") && request.method === "POST") {
     const hookBody = await request.json<ILineHookBody>();
     proceedFurtherActionFromHookBody(hookBody, env);
-
     return new Response(
       JSON.stringify({
         success: true,
