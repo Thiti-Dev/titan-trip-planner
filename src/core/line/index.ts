@@ -27,8 +27,16 @@ export async function proceedFurtherActionFromHookBody(
       replyToken,
       "My memories just got cleared. If you need my help just put the '#' before the message that you want to speak with me"
     );
+    return;
+  } else if (message.text === "#current-plan") {
+    const previousContextMemory = await env.GPT.get(source.groupId);
+    replyLineMessage(
+      env.LINE_CHANNEL_ACCESS_TOKEN,
+      replyToken,
+      previousContextMemory ?? `Haven't yet initiated the plan`
+    );
+    return;
   }
-
   const previousContextMemory = await env.GPT.get(source.groupId);
   const gptInstance = new OpenAI(env.OPEN_AI_ACCESS_KEY).getInstance();
 
@@ -56,7 +64,7 @@ export async function proceedFurtherActionFromHookBody(
 
         }
 
-        and if the above suggested that made from you only have number of specific day and I am not telling you to add another extra day, please don't add another day just remain the same day. And if i tell you to change the place on specific day, please do be always remember that you can only respond with the information that you given from day1 to the end.
+        and if the above suggested that made from you only have number of specific day and I am not telling you to add another extra day, please don't add another day just remain the same day. And if i tell you to change the place on specific day or add more days, please do be always remember that you can only respond with the information that you given from day1 to the end.
         
         `
             : ``
@@ -68,8 +76,15 @@ export async function proceedFurtherActionFromHookBody(
       },
     ],
   });
+
   const gptResponseMsg: string = response.data.choices[0].message!.content;
-  if (gptResponseMsg.includes("Day 1") || gptResponseMsg.includes("Day1"))
-    await env.GPT.put(source.groupId, gptResponseMsg); // remember if it spill out the full list
-  replyLineMessage(env.LINE_CHANNEL_ACCESS_TOKEN, replyToken, gptResponseMsg);
+  if (gptResponseMsg.includes("Day 1") || gptResponseMsg.includes("Day1")) {
+    env.GPT.put(source.groupId, gptResponseMsg); // remember if it spill out the full list
+  }
+
+  await replyLineMessage(
+    env.LINE_CHANNEL_ACCESS_TOKEN,
+    replyToken,
+    gptResponseMsg
+  );
 }

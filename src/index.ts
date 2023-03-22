@@ -1,4 +1,6 @@
+import { ChatCompletionRequestMessageRoleEnum } from "openai";
 import { proceedFurtherActionFromHookBody } from "./core/line";
+import OpenAI from "./core/openai";
 import { handleOptionsRequest } from "./request-handlers/cors";
 
 async function fetch(
@@ -12,10 +14,42 @@ async function fetch(
 
   if (request.url.endsWith("/api/line-hook") && request.method === "POST") {
     const hookBody = await request.json<ILineHookBody>();
-    proceedFurtherActionFromHookBody(hookBody, env);
+    await proceedFurtherActionFromHookBody(hookBody, env);
+
     return new Response(
       JSON.stringify({
         success: true,
+      }),
+      {
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+  } else if (
+    request.url.endsWith("/api/chat-with-gpt") &&
+    request.method === "POST"
+  ) {
+    const gptInstance = new OpenAI(env.OPEN_AI_ACCESS_KEY).getInstance();
+    const body: any = await request.json();
+    if (!body.msg)
+      return new Response("msg is required in a body", { status: 400 });
+
+    const response = await gptInstance.createChatCompletion({
+      model: env.GPT_MODEL,
+      messages: [
+        {
+          role: ChatCompletionRequestMessageRoleEnum.Assistant,
+          content: `
+            ${body.msg}
+            `,
+        },
+      ],
+    });
+
+    const gptResponseMsg: string = response.data.choices[0].message!.content;
+    return new Response(
+      JSON.stringify({
+        success: true,
+        gpt_response: gptResponseMsg,
       }),
       {
         headers: { "Content-Type": "application/json" },

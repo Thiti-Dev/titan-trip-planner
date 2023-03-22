@@ -3,7 +3,7 @@ export function replyLineMessage(
   replyToken: string,
   message: string
 ) {
-  fetch("https://api.line.me/v2/bot/message/reply", {
+  return fetch("https://api.line.me/v2/bot/message/reply", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
