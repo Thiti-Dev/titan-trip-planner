@@ -1,0 +1,6 @@
+name = "titan trip line hook handler"
+main = "src/index.ts"
+compatibility_date = "2023-03-22"
+
+[vars]
+GPT_MODEL = "gpt-3.5-turbo"
