@@ -1,3 +1,4 @@
+import { proceedFurtherActionFromHookBody } from "./core/line";
 import { handleOptionsRequest } from "./request-handlers/cors";
 
 async function fetch(
@@ -8,16 +9,22 @@ async function fetch(
   if (request.method === "OPTIONS") {
     return handleOptionsRequest(request);
   }
-  const response = new Response(
-    JSON.stringify({
-      success: true,
-    }),
-    {
-      headers: { "Content-Type": "application/json" },
-    }
-  );
 
-  return response;
+  if (request.url.endsWith("/api/line-hook") && request.method === "POST") {
+    const hookBody = await request.json<ILineHookBody>();
+    proceedFurtherActionFromHookBody(hookBody, env);
+
+    return new Response(
+      JSON.stringify({
+        success: true,
+      }),
+      {
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+  } else {
+    return new Response("Not Found", { status: 404 });
+  }
 }
 
 export default {
